@@ -1,13 +1,14 @@
-export async function aiCorrect(payload){
-  const items = payload.items || [];
-  const text = items[0]?.answer || "";
+const AI_URL = "https://loops-ai-coach.seansynge.workers.dev/api/correct";
 
-  const costliestTag = text.length < 6 ? "too_short" : "verb_form";
+async function aiCorrect(payload) {
+  const r = await fetch(AI_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-  return {
-    coachLine: costliestTag === "too_short"
-      ? "Not enough to score. Add detail."
-      : "Verb breaks the sentence.",
-    modelAnswer: "Mi colegio es grande y tiene un patio."
-  };
+  const text = await r.text();
+  if (!r.ok) throw new Error(`AI error ${r.status}: ${text}`);
+  return JSON.parse(text);
 }
+
