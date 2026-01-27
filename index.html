@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LOOPS</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logoRing"><img src="./crest.png" alt="" /></div>
+        <div class="brandText">
+          <h1>LOOPS</h1>
+          <p class="sub">Junior Cycle Spanish • Written Practice</p>
+          <p class="motto">Practice. Fix. Level up.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="card" id="screenGame">
+      <h2>Round</h2>
+      <div id="promptArea"></div>
+      <input id="answerInput" placeholder="Type your answer…" />
+      <button id="submitBtn">Submit</button>
+    </section>
+
+    <section class="card hidden" id="screenResults">
+      <h2>Coach</h2>
+      <div id="coachLine"></div>
+      <div>
+        <b>You wrote:</b>
+        <div id="yourAnswer"></div>
+      </div>
+      <div>
+        <b>That scores:</b>
+        <div id="modelAnswer"></div>
+      </div>
+      <button id="gymBtn">Gym</button>
+    </section>
+  </main>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
