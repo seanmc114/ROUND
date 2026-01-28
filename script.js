@@ -1,130 +1,166 @@
-/* ===========================
-   LOOPS / ROUND — script.js
-   Coach-safe version
-   =========================== */
+/* =========================================================
+   ROUND — Home, Themes, Progress, Launch
+   Clean, safe foundation for JC language practice
+   ========================================================= */
 
-/* ---------- Utilities ---------- */
+/* ---------- CONFIG ---------- */
 
-function clamp(n, min, max) {
-  return Math.max(min, Math.min(max, n));
-}
+const THEMES = [
+  {
+    id: "myself",
+    title: "Myself & My World",
+    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac",
+    levels: 10
+  },
+  {
+    id: "school",
+    title: "My School",
+    image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
+    levels: 10
+  },
+  {
+    id: "family",
+    title: "Family & Friends",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+    levels: 10
+  },
+  {
+    id: "town",
+    title: "My Town / Area",
+    image: "https://images.unsplash.com/photo-1508057198894-247b23fe5ade",
+    levels: 10
+  },
+  {
+    id: "freetime",
+    title: "Free Time & Hobbies",
+    image: "https://images.unsplash.com/photo-1517649763962-0c623066013b",
+    levels: 10
+  },
+  {
+    id: "food",
+    title: "Food & Daily Life",
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+    levels: 10
+  },
+  {
+    id: "travel",
+    title: "Holidays & Travel",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+    levels: 10
+  },
+  {
+    id: "health",
+    title: "Health & Wellbeing",
+    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a",
+    levels: 10
+  }
+];
 
-/* ---------- COACH CORE ---------- */
-/*
-  HARD RULE:
-  - learner language is NEVER used for generation
-  - answers are DISPLAY ONLY
-*/
+const QUESTIONS_PER_LEVEL = 5;
 
-function pickRoundFocus(items, lang, rubric) {
-  const counts = {};
-  const weight = {
-    verb_form: 10,
-    verb_ending: 9,
-    word_order: 9,
-    missing_be: 8,
-    articles_gender: 6,
-    agreement: 6,
-    spelling: 4,
-    no_connector: 3,
-    too_short: 2,
-    detail: 1
-  };
+/* ---------- STATE ---------- */
 
-  // count tags
-  items.forEach(it => {
-    (it.tags || []).forEach(tag => {
-      counts[tag] = (counts[tag] || 0) + 1;
-    });
-  });
-
-  let best = "detail";
-  let bestScore = -1;
-
-  Object.keys(counts).forEach(tag => {
-    const score = counts[tag] * (weight[tag] || 1);
-    if (
-      score > bestScore ||
-      (score === bestScore && (weight[tag] || 0) > (weight[best] || 0))
-    ) {
-      bestScore = score;
-      best = tag;
-    }
-  });
-
-  // 🔒 critical: only indices, never learner language
-  const indices = [];
-  items.forEach((it, i) => {
-    if ((it.tags || []).includes(best)) {
-      indices.push(i + 1); // human-friendly numbering
-    }
-  });
-
-  // return structured focus, not text
-  return {
-    tag: best,
-    indices
-  };
-}
-
-/* ---------- MODEL ANSWERS ---------- */
-/*
-  Prompt-based only.
-  Never derived from learner answers.
-*/
-
-function modelFromPrompt(prompt, lang, level) {
-  const p = prompt.toLowerCase();
-
-  // Spanish v1 — safe, boring, exam-valid
-  if (p.includes("colegio"))
-    return "Mi colegio es grande y está en el centro.";
-  if (p.includes("profesor") || p.includes("clase"))
-    return "Mi profesor es simpático y explica bien.";
-  if (p.includes("asignatura"))
-    return "Mi asignatura favorita es el inglés.";
-  if (p.includes("amigo"))
-    return "Mi mejor amigo es divertido.";
-  if (p.includes("familia"))
-    return "Mi familia es pequeña y nos llevamos bien.";
-
-  return "Es interesante y me gusta bastante.";
-}
-
-/* ---------- ROUND FLOW ---------- */
-
-let STATE = {
-  focusTag: null,
-  errorIndices: []
+const STATE = {
+  currentTheme: null,
+  currentLevel: null
 };
 
-function analyseRound(items, lang, rubric, level) {
-  const focus = pickRoundFocus(items, lang, rubric);
+/* ---------- STORAGE ---------- */
 
-  // Identify where the error occurs (indices only)
-  const indices = [];
-  items.forEach((it, i) => {
-    if ((it.tags || []).includes(focus)) {
-      indices.push(i + 1); // human-readable
-    }
-  });
-
-  STATE.focusTag = focus;
-  STATE.errorIndices = indices;
-
-  return {
-    focusTag: focus,
-    errorIndices: indices,
-    modelAnswer: modelFromPrompt(
-      items[0]?.prompt || "",
-      lang,
-      level
-    )
-  };
+function loadProgress() {
+  return JSON.parse(localStorage.getItem("round-progress") || "{}");
 }
 
-/* ---------- EXPORT ---------- */
+function saveProgress(p) {
+  localStorage.setItem("round-progress", JSON.stringify(p));
+}
 
-window.LOOPS = {
-  analyseRound
-};
+/* ---------- HOME RENDER ---------- */
+
+function renderHome() {
+  const root = document.getElementById("app");
+  root.innerHTML = `
+    <div class="home">
+      <div class="crest-watermark"></div>
+      <h1 class="home-title">ROUND</h1>
+      <p class="home-sub">Turn the cogs. Build the answer.</p>
+      <div class="tile-grid" id="tileGrid"></div>
+    </div>
+  `;
+
+  const grid = document.getElementById("tileGrid");
+  const progress = loadProgress();
+
+  THEMES.forEach(theme => {
+    const completed = progress[theme.id] || 0;
+    const totalQs = theme.levels * QUESTIONS_PER_LEVEL;
+    const pct = Math.round((completed / totalQs) * 100);
+
+    const tile = document.createElement("div");
+    tile.className = "theme-tile";
+    tile.style.backgroundImage = `url(${theme.image})`;
+
+    tile.innerHTML = `
+      <div class="tile-overlay">
+        <h2>${theme.title}</h2>
+        <div class="cog-row">⚙️ ⚙️ ⚙️</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="progress-text">${completed} / ${totalQs}</div>
+      </div>
+    `;
+
+    tile.onclick = () => startTheme(theme.id);
+    grid.appendChild(tile);
+  });
+}
+
+/* ---------- THEME / LEVEL ---------- */
+
+function startTheme(themeId) {
+  STATE.currentTheme = themeId;
+  STATE.currentLevel = 1;
+  startLevel();
+}
+
+function startLevel() {
+  const root = document.getElementById("app");
+  root.innerHTML = `
+    <div class="level">
+      <div class="coach-header">
+        <img src="coach.svg" class="coach-avatar" />
+        <div class="coach-line">Let’s turn this cog.</div>
+      </div>
+      <div class="question-box">
+        <p><b>Question ${STATE.currentLevel} / 10</b></p>
+        <p>Write a short paragraph on the topic.</p>
+        <textarea placeholder="Type your answer here..."></textarea>
+        <button id="submitBtn">Submit</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("submitBtn").onclick = completeQuestion;
+}
+
+/* ---------- PROGRESS ---------- */
+
+function completeQuestion() {
+  const progress = loadProgress();
+  const theme = STATE.currentTheme;
+
+  progress[theme] = (progress[theme] || 0) + 1;
+  saveProgress(progress);
+
+  STATE.currentLevel++;
+  if (STATE.currentLevel > 10) {
+    renderHome();
+  } else {
+    startLevel();
+  }
+}
+
+/* ---------- INIT ---------- */
+
+document.addEventListener("DOMContentLoaded", renderHome);
