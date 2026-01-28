@@ -3,18 +3,55 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* ---------- PAGE FEEL ---------- */
+
 body {
   margin: 0;
-  background: #0b1020; /* dark backdrop so tiles read as objects */
-  color: white;
+  background: linear-gradient(180deg, #f5f7fb 0%, #eef2ff 100%);
+  color: #0f172a;
+  position: relative;
+}
+
+/* ---------- BRAND HEADER ---------- */
+
+.top {
+  text-align: center;
+  padding: 28px 20px 10px;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: 38px;
+  letter-spacing: 2px;
+  color: #0f172a;
+}
+
+.invite {
+  margin-top: 6px;
+  color: #334155;
+  font-weight: 500;
+}
+
+/* ---------- CREST WATERMARK ---------- */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("crest.png") center / 420px no-repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ---------- APP CONTAINER ---------- */
 
 #app {
-  max-width: 1100px;          /* 🔒 prevents bands */
-  margin: 40px auto;          /* centers tiles */
+  max-width: 1100px;
+  margin: 40px auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ---------- TILE WRAPPER ---------- */
@@ -23,40 +60,43 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 28px;                  /* visible space between tiles */
+  gap: 28px;
 }
 
-/* ---------- TILE (CARD OBJECT) ---------- */
+/* ---------- TILE (CLEAR CARDS) ---------- */
 
 .tile {
-  width: 300px;               /* 🔒 fixed width = not a band */
-  height: 200px;              /* 🔒 fixed height */
+  width: 300px;
+  height: 200px;
   border-radius: 18px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
   background-size: cover;
   background-position: center;
-  background-color: #111;
+  background-color: #e5e7eb;
   box-shadow:
-    0 12px 28px rgba(0,0,0,0.45),
-    0 2px 6px rgba(0,0,0,0.35);
-  transition: transform 0.18s ease;
+    0 10px 20px rgba(15,23,42,0.15),
+    0 2px 6px rgba(15,23,42,0.1);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .tile:hover {
   transform: translateY(-6px) scale(1.04);
+  box-shadow:
+    0 18px 32px rgba(15,23,42,0.25),
+    0 6px 12px rgba(15,23,42,0.15);
 }
 
-/* Dark overlay so text is readable */
+/* Light overlay (keeps images bright) */
 .tile::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0,0,0,0.7),
-    rgba(0,0,0,0.25)
+    rgba(255,255,255,0.85),
+    rgba(255,255,255,0.25)
   );
 }
 
@@ -75,36 +115,36 @@ body {
 .tile h2 {
   margin: 0;
   font-size: 20px;
-  line-height: 1.2;
+  color: #0f172a;
 }
 
 .cogs {
   margin-top: 6px;
-  opacity: 0.9;
+  color: #1d4ed8;
+  font-weight: 600;
 }
 
 /* ---------- PROGRESS ---------- */
 
 .progress {
-  background: rgba(255,255,255,0.25);
+  background: rgba(15,23,42,0.15);
   border-radius: 8px;
   height: 10px;
   overflow: hidden;
 }
 
 .progress-fill {
-  background: #22c55e;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
   height: 100%;
-  width: 0%;
 }
 
 .progress-text {
   font-size: 12px;
   margin-top: 6px;
-  opacity: 0.85;
+  color: #334155;
 }
 
-/* ---------- LEVEL SCREEN ---------- */
+/* ---------- LEVEL ---------- */
 
 .level-screen {
   max-width: 600px;
@@ -116,10 +156,12 @@ textarea {
   width: 100%;
   min-height: 120px;
   border-radius: 12px;
-  border: none;
+  border: 1px solid #c7d2fe;
   padding: 12px;
   font-size: 16px;
 }
+
+/* ---------- BUTTON ---------- */
 
 button {
   margin-top: 16px;
@@ -128,5 +170,20 @@ button {
   border: none;
   font-size: 16px;
   font-weight: 600;
+  background: #2563eb;
+  color: white;
   cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+/* ---------- FOOTER ---------- */
+
+.footer {
+  text-align: center;
+  padding: 18px;
+  font-size: 12px;
+  color: #475569;
 }
