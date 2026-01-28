@@ -9,7 +9,7 @@ body {
   color: white;
 }
 
-/* ---------- GRID ---------- */
+/* ---------- CONTAINER ---------- */
 
 #app {
   max-width: 1200px;
@@ -17,56 +17,47 @@ body {
   padding: 24px;
 }
 
-.tile-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 🔒 LOCK TO 3 COLUMNS */
-  gap: 20px;
+/* ---------- TILE WRAP (NO GRID) ---------- */
+
+.tile-wrap {
+  display: flex;
+  flex-wrap: wrap;        /* 🔒 WRAP INTO ROWS */
+  justify-content: center;
+  gap: 24px;
 }
 
-/* Tablet */
-@media (max-width: 900px) {
-  .tile-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .tile-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ---------- TILE ---------- */
+/* ---------- TILE (FIXED SIZE = NO BANDS) ---------- */
 
 .tile {
-  aspect-ratio: 4 / 3;              /* 🔑 STOPS BANDS */
+  width: 320px;           /* 🔒 FIXED WIDTH */
+  height: 220px;          /* 🔒 FIXED HEIGHT */
   border-radius: 18px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
   transition: transform 0.15s ease;
 }
 
 .tile:hover {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
+/* Dark overlay */
 .tile::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0,0,0,0.65),
+    rgba(0,0,0,0.7),
     rgba(0,0,0,0.25)
   );
 }
 
-/* ---------- CONTENT ---------- */
+/* ---------- TILE CONTENT ---------- */
 
 .tile-content {
   position: absolute;
@@ -80,11 +71,10 @@ body {
 
 .tile h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .cogs {
-  margin-top: 4px;
   opacity: 0.9;
 }
 
@@ -100,38 +90,10 @@ body {
 .progress-fill {
   background: #22c55e;
   height: 100%;
-  width: 0%;
 }
 
 .progress-text {
   font-size: 12px;
   margin-top: 6px;
   opacity: 0.85;
-}
-
-/* ---------- LEVEL ---------- */
-
-.level-screen {
-  max-width: 600px;
-  margin: 40px auto;
-  text-align: center;
-}
-
-textarea {
-  width: 100%;
-  min-height: 120px;
-  border-radius: 12px;
-  border: none;
-  padding: 12px;
-  font-size: 16px;
-}
-
-button {
-  margin-top: 16px;
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
 }
