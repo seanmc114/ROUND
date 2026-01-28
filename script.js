@@ -13,8 +13,7 @@
 
   const PROMPTS_PER_ROUND = 5;
   const PENALTY_SEC = 30;
-  const PROMPTS_PER_ROUND = 5;
-const PENALTY_SEC = 30;
+  
 
 // === COACH DIAGNOSTIC MODEL (paste here) ===
 const ERROR_WEIGHTS = {
