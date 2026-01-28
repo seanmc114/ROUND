@@ -13,6 +13,31 @@
 
   const PROMPTS_PER_ROUND = 5;
   const PENALTY_SEC = 30;
+  const PROMPTS_PER_ROUND = 5;
+const PENALTY_SEC = 30;
+
+// === COACH DIAGNOSTIC MODEL (paste here) ===
+const ERROR_WEIGHTS = {
+  missing_finite_verb: 10,
+  wrong_verb_ending: 9,
+  wrong_tense: 9,
+  agreement_error: 8,
+  article_missing: 7,
+  gender_mismatch: 7,
+  word_order: 7,
+  preposition_error: 6,
+  negation_error: 6,
+  connector_missing: 4,
+  opinion_missing: 3,
+  reason_missing: 3,
+  too_short: 2,
+  detail: 1
+};
+// === END COACH DIAGNOSTIC MODEL ===
+
+// ---- Safe storage ----
+const storage = (function(){
+ 
 // ---- Safe storage (prevents crashes in private mode / blocked storage) ----
 const storage = (function(){
   const mem = Object.create(null);
