@@ -3,16 +3,14 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ---------- PAGE FEEL ---------- */
-
 body {
   margin: 0;
-  background: linear-gradient(180deg, #f5f7fb 0%, #eef2ff 100%);
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
   color: #0f172a;
   position: relative;
 }
 
-/* ---------- BRAND HEADER ---------- */
+/* ---------- BRAND ---------- */
 
 .top {
   text-align: center;
@@ -23,17 +21,14 @@ body {
   margin: 0;
   font-size: 38px;
   letter-spacing: 2px;
-  color: #0f172a;
 }
 
 .invite {
   margin-top: 6px;
   color: #334155;
-  font-weight: 500;
 }
 
-/* ---------- CREST WATERMARK ---------- */
-
+/* Crest watermark — brand locked */
 body::before {
   content: "";
   position: fixed;
@@ -44,7 +39,7 @@ body::before {
   z-index: 0;
 }
 
-/* ---------- APP CONTAINER ---------- */
+/* ---------- APP ---------- */
 
 #app {
   max-width: 1100px;
@@ -54,7 +49,7 @@ body::before {
   z-index: 1;
 }
 
-/* ---------- TILE WRAPPER ---------- */
+/* ---------- TILE LAYOUT ---------- */
 
 .tile-wrap {
   display: flex;
@@ -63,7 +58,7 @@ body::before {
   gap: 28px;
 }
 
-/* ---------- TILE (CLEAR CARDS) ---------- */
+/* ---------- TILE (REAL CARDS) ---------- */
 
 .tile {
   width: 300px;
@@ -88,14 +83,14 @@ body::before {
     0 6px 12px rgba(15,23,42,0.15);
 }
 
-/* Light overlay (keeps images bright) */
+/* light overlay */
 .tile::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(255,255,255,0.85),
+    rgba(255,255,255,0.9),
     rgba(255,255,255,0.25)
   );
 }
@@ -115,7 +110,6 @@ body::before {
 .tile h2 {
   margin: 0;
   font-size: 20px;
-  color: #0f172a;
 }
 
 .cogs {
@@ -160,8 +154,6 @@ textarea {
   padding: 12px;
   font-size: 16px;
 }
-
-/* ---------- BUTTON ---------- */
 
 button {
   margin-top: 16px;
