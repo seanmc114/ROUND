@@ -1,6 +1,14 @@
 /* =========================================
-   ROUND — Stable Tiles + Game Loop
+   ROUND — Internal Logic Improved
+   (UI, tiles, flow preserved)
    ========================================= */
+
+/* ---------- CONFIG ---------- */
+
+const GAME_NAME = "ROUND";
+const LEVELS_PER_THEME = 10;
+
+/* ---------- THEMES (unchanged) ---------- */
 
 const THEMES = [
   { id: "myself", title: "Myself", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80" },
@@ -14,12 +22,17 @@ const THEMES = [
   { id: "travel", title: "Holidays & Travel", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" }
 ];
 
-const LEVELS_PER_THEME = 10;
+/* ---------- STATE ---------- */
 
 let STATE = {
   theme: null,
-  level: 1
+  level: 1,
+  answers: [],        // learner answers (stored but never reused by coach)
+  marks: [],          // marking objects with tags
+  startTime: null
 };
+
+/* ---------- PROGRESS ---------- */
 
 function loadProgress() {
   return JSON.parse(localStorage.getItem("round-progress") || "{}");
@@ -29,7 +42,7 @@ function saveProgress(p) {
   localStorage.setItem("round-progress", JSON.stringify(p));
 }
 
-/* ---------- HOME ---------- */
+/* ---------- HOME (tiles unchanged) ---------- */
 
 function renderHome() {
   const app = document.getElementById("app");
@@ -43,7 +56,7 @@ function renderHome() {
         return `
           <div class="tile"
                style="background-image:url('${t.image}')"
-               onclick="startTheme('${t.id}')">
+               onclick="startRound('${t.id}')">
             <div class="tile-content">
               <div>
                 <h2>${t.title}</h2>
@@ -63,39 +76,165 @@ function renderHome() {
   `;
 }
 
-/* ---------- GAME ---------- */
+/* ---------- ROUND START (🔧 rewired) ---------- */
 
-function startTheme(themeId) {
+function startRound(themeId) {
   STATE.theme = themeId;
   STATE.level = 1;
-  startLevel();
+  STATE.answers = [];
+  STATE.marks = [];
+  loadLevel();
 }
 
-function startLevel() {
+/* ---------- LEVEL ---------- */
+
+function loadLevel() {
+  STATE.startTime = Date.now();
   const app = document.getElementById("app");
+
   app.innerHTML = `
     <div class="level-screen">
       <h2>${STATE.theme.toUpperCase()} — Level ${STATE.level}</h2>
       <p>Write a short paragraph.</p>
-      <textarea placeholder="Go on — put something down."></textarea>
+      <textarea id="answerBox"></textarea>
       <button onclick="submitAnswer()">Submit</button>
     </div>
   `;
 }
 
-function submitAnswer() {
-  const passed = Math.random() > 0.4;
+/* ---------- MARKING (internal) ---------- */
 
-  if (passed) {
-    const p = loadProgress();
-    p[STATE.theme] = (p[STATE.theme] || 0) + 1;
-    saveProgress(p);
-    alert("Coach: Good. That cog turned.");
-  } else {
-    alert("Coach: That cog slipped. Fix it and go again.");
+function markAnswer(text) {
+  // 🔧 INTERNAL CHANGE: coach NEVER reuses learner text
+  // learner text is stored but not echoed
+
+  const tags = [];
+
+  if (!text.match(/\b(estoy|soy|es|está|voy|me gusta)\b/i)) {
+    tags.push("verb_form");
+  }
+  if (text.split(" ").length < 10) {
+    tags.push("too_short");
+  }
+  if (!text.match(/\b(y|pero|porque)\b/i)) {
+    tags.push("no_connector");
   }
 
-  renderHome();
+  return {
+    score: Math.max(0, 10 - tags.length * 2),
+    tags
+  };
 }
+
+/* ---------- SUBMIT ---------- */
+
+function submitAnswer() {
+  const text = document.getElementById("answerBox").value.trim();
+  if (!text) return;
+
+  STATE.answers.push(text);
+  const mark = markAnswer(text);
+  STATE.marks.push(mark);
+
+  if (STATE.level < 5) {
+    STATE.level++;
+    loadLevel();
+  } else {
+    endRound();
+  }
+}
+
+/* ---------- ROUND END ---------- */
+
+function pickMostExpensiveError(marks) {
+  // 🔧 INTERNAL CHANGE: round-wide aggregation
+  const weights = {
+    verb_form: 10,
+    verb_ending: 9,
+    word_order: 9,
+    no_connector: 6,
+    too_short: 4
+  };
+
+  const counts = {};
+  marks.forEach(m =>
+    (m.tags || []).forEach(tag => {
+      counts[tag] = (counts[tag] || 0) + 1;
+    })
+  );
+
+  let best = null;
+  let bestScore = 0;
+
+  Object.keys(counts).forEach(tag => {
+    const score = counts[tag] * (weights[tag] || 1);
+    if (score > bestScore) {
+      bestScore = score;
+      best = tag;
+    }
+  });
+
+  return best;
+}
+
+function endRound() {
+  const focus = pickMostExpensiveError(STATE.marks);
+  showCoachFeedback(focus);
+}
+
+/* ---------- COACH ---------- */
+
+function showCoachFeedback(focus) {
+  // 🔧 INTERNAL CHANGE: clean coach language only
+  const explanations = {
+    verb_form: {
+      explain: "Your verbs need to be in the correct form to score marks.",
+      model: "Me gusta mi colegio porque es moderno y interesante."
+    },
+    no_connector: {
+      explain: "Using connectives helps your writing flow and scores higher.",
+      model: "Mi colegio es grande y moderno, pero es muy acogedor."
+    },
+    too_short: {
+      explain: "Short answers limit your marks. Add detail and opinion.",
+      model: "Mi colegio está en el centro y me gusta porque los profesores son simpáticos."
+    }
+  };
+
+  const info = explanations[focus];
+
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="level-screen">
+      <h2>Coach</h2>
+      <p>${info.explain}</p>
+      <p><strong>Model:</strong> ${info.model}</p>
+      <button onclick="startGym('${focus}')">Gym</button>
+      <button onclick="renderHome()">Back to tiles</button>
+    </div>
+  `;
+}
+
+/* ---------- GYM ---------- */
+
+function startGym(focus) {
+  const drills = {
+    verb_form: "Choose the correct verb form: Me ___ (gustar) el fútbol.",
+    no_connector: "Join the ideas using a connector: Mi colegio es grande. Es moderno.",
+    too_short: "Add one extra sentence to give more detail."
+  };
+
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="level-screen">
+      <h2>Gym</h2>
+      <p>${drills[focus]}</p>
+      <textarea></textarea>
+      <button onclick="renderHome()">Back to tiles</button>
+    </div>
+  `;
+}
+
+/* ---------- INIT ---------- */
 
 document.addEventListener("DOMContentLoaded", renderHome);
