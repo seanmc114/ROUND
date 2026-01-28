@@ -573,20 +573,28 @@ function tipForTags(tags, lang){
 }
 
 
-function pickRoundFocus(items, lang, rubric){
-  const wrongItems = (items||[]).filter(it=>!it.ok);
-  const src = wrongItems.length ? wrongItems : (items||[]);
+function pickRoundFocus(items) {
   const counts = {};
-  const examples = {};
 
-  src.forEach(it=>{
-    (it.tags||[]).forEach(t=>{
-      if(!t) return;
-      counts[t] = (counts[t]||0)+1;
-      if(!examples[t]) examples[t]=[];
-      if(it.examples && it.examples.length) examples[t].push(...it.examples);
+  (items || []).forEach(it => {
+    (it.tags || []).forEach(tag => {
+      counts[tag] = (counts[tag] || 0) + 1;
     });
   });
+
+  let best = "detail";
+  let bestScore = -1;
+
+  Object.keys(counts).forEach(tag => {
+    const score = counts[tag] * (ERROR_WEIGHTS[tag] || 1);
+    if (score > bestScore) {
+      bestScore = score;
+      best = tag;
+    }
+  });
+
+  return best;
+}
 
   const labelMap = {
     spelling: "Spelling / accents",
