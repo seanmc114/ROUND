@@ -307,7 +307,7 @@ function presentCoachModal(){
 
     const prompt = String(wrongItem.prompt||"").trim();
     const ans = String(wrongItem.answer||"").trim();
-    const model = buildSuggestionForItem(prompt, "", state.lang, levelRubric(state.level), focusTag);
+    const model = buildSuggestionForItem(prompt, ans, state.lang, levelRubric(state.level), focusTag);
 
     const html = `
       <div style="font-size:16px; font-weight:950; letter-spacing:.2px">EL MISTER</div>
@@ -1917,7 +1917,7 @@ state.mark.items = state.mark.items.map(it=>{
   const focusTag = priority.find(t=>tags.includes(t)) || (tags[0]||"detail");
 
   // Prefer AI fix when it adds value; otherwise use local targeted fix.
-  let fix = (it.aiFix && it.answer && !sameSuggestion(it.aiFix, it.answer)) ? it.aiFix : buildSuggestionForItem(it.prompt, "", state.lang, rubric, focusTag);
+  let fix = (it.aiFix && it.answer && !sameSuggestion(it.aiFix, it.answer)) ? it.aiFix : buildSuggestionForItem(it.prompt, it.answer, state.lang, rubric, focusTag);
 
   // Never parrot
   if(it.answer && sameSuggestion(fix, it.answer)) fix = buildSuggestionForItem(it.prompt, "", state.lang, rubric, "detail");
