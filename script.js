@@ -31,6 +31,7 @@ function pickRoundFocus(items, lang, rubric) {
     detail: 1
   };
 
+  // count tags
   items.forEach(it => {
     (it.tags || []).forEach(tag => {
       counts[tag] = (counts[tag] || 0) + 1;
@@ -51,7 +52,19 @@ function pickRoundFocus(items, lang, rubric) {
     }
   });
 
-  return best;
+  // 🔒 critical: only indices, never learner language
+  const indices = [];
+  items.forEach((it, i) => {
+    if ((it.tags || []).includes(best)) {
+      indices.push(i + 1); // human-friendly numbering
+    }
+  });
+
+  // return structured focus, not text
+  return {
+    tag: best,
+    indices
+  };
 }
 
 /* ---------- MODEL ANSWERS ---------- */
