@@ -307,7 +307,7 @@ function presentCoachModal(){
 
     const prompt = String(wrongItem.prompt||"").trim();
     const ans = String(wrongItem.answer||"").trim();
-    const model = buildSuggestionForItem(prompt, ans, state.lang, levelRubric(state.level), focusTag);
+    const model = buildSuggestionForItem(prompt, "", state.lang, levelRubric(state.level), focusTag);
 
     const html = `
       <div style="font-size:16px; font-weight:950; letter-spacing:.2px">EL MISTER</div>
