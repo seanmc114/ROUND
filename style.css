@@ -5,47 +5,50 @@
 
 body {
   margin: 0;
-  background: #0f172a;
+  background: #0b1020; /* dark backdrop so tiles read as objects */
   color: white;
 }
 
-/* ---------- CONTAINER ---------- */
+/* ---------- APP CONTAINER ---------- */
 
 #app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
+  max-width: 1100px;          /* 🔒 prevents bands */
+  margin: 40px auto;          /* centers tiles */
+  padding: 0 20px;
 }
 
-/* ---------- TILE WRAP (NO GRID) ---------- */
+/* ---------- TILE WRAPPER ---------- */
 
 .tile-wrap {
   display: flex;
-  flex-wrap: wrap;        /* 🔒 WRAP INTO ROWS */
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 24px;
+  gap: 28px;                  /* visible space between tiles */
 }
 
-/* ---------- TILE (FIXED SIZE = NO BANDS) ---------- */
+/* ---------- TILE (CARD OBJECT) ---------- */
 
 .tile {
-  width: 320px;           /* 🔒 FIXED WIDTH */
-  height: 220px;          /* 🔒 FIXED HEIGHT */
+  width: 300px;               /* 🔒 fixed width = not a band */
+  height: 200px;              /* 🔒 fixed height */
   border-radius: 18px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-  transition: transform 0.15s ease;
+  background-color: #111;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.45),
+    0 2px 6px rgba(0,0,0,0.35);
+  transition: transform 0.18s ease;
 }
 
 .tile:hover {
-  transform: scale(1.05);
+  transform: translateY(-6px) scale(1.04);
 }
 
-/* Dark overlay */
+/* Dark overlay so text is readable */
 .tile::after {
   content: "";
   position: absolute;
@@ -72,9 +75,11 @@ body {
 .tile h2 {
   margin: 0;
   font-size: 20px;
+  line-height: 1.2;
 }
 
 .cogs {
+  margin-top: 6px;
   opacity: 0.9;
 }
 
@@ -90,10 +95,38 @@ body {
 .progress-fill {
   background: #22c55e;
   height: 100%;
+  width: 0%;
 }
 
 .progress-text {
   font-size: 12px;
   margin-top: 6px;
   opacity: 0.85;
+}
+
+/* ---------- LEVEL SCREEN ---------- */
+
+.level-screen {
+  max-width: 600px;
+  margin: 60px auto;
+  text-align: center;
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 12px;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 16px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
 }
