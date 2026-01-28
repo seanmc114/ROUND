@@ -1,8 +1,6 @@
-/* =====================================================
-   ROUND — Bright Game Tiles + Progress + Play Loop
-   ===================================================== */
-
-/* ---------- THEMES (Junior Cycle aligned) ---------- */
+/* =========================================
+   ROUND — Clear Tiles, Game Feel, Progress
+   ========================================= */
 
 const THEMES = [
   {
@@ -49,17 +47,10 @@ const THEMES = [
     id: "travel",
     title: "Holidays & Travel",
     image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
-  },
-  {
-    id: "future",
-    title: "Future Plans",
-    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80"
   }
 ];
 
 const LEVELS_PER_THEME = 10;
-
-/* ---------- STATE ---------- */
 
 let STATE = {
   theme: null,
@@ -67,7 +58,7 @@ let STATE = {
   startTime: null
 };
 
-/* ---------- PROGRESS ---------- */
+/* ---------- Progress ---------- */
 
 function loadProgress() {
   return JSON.parse(localStorage.getItem("round-progress") || "{}");
@@ -77,14 +68,14 @@ function saveProgress(p) {
   localStorage.setItem("round-progress", JSON.stringify(p));
 }
 
-/* ---------- HOME (TILES) ---------- */
+/* ---------- Home ---------- */
 
 function renderHome() {
   const app = document.getElementById("app");
   const progress = loadProgress();
 
   app.innerHTML = `
-    <div class="tile-grid">
+    <div class="tile-wrap">
       ${THEMES.map(t => {
         const done = progress[t.id] || 0;
         const pct = Math.round((done / LEVELS_PER_THEME) * 100);
@@ -114,7 +105,7 @@ function renderHome() {
   `;
 }
 
-/* ---------- GAME LOOP ---------- */
+/* ---------- Game ---------- */
 
 function startTheme(themeId) {
   STATE.theme = themeId;
@@ -130,17 +121,14 @@ function startLevel() {
     <div class="level-screen">
       <h2>${STATE.theme.toUpperCase()} — Level ${STATE.level}</h2>
       <p>Write a short paragraph.</p>
-      <textarea placeholder="Go on… put something down."></textarea>
+      <textarea placeholder="Go on — put something down."></textarea>
       <button onclick="submitAnswer()">Submit</button>
     </div>
   `;
 }
 
 function submitAnswer() {
-  const timeTaken = Date.now() - STATE.startTime;
-
-  // 🔑 Coach logic hooks in here (gold preserved)
-  const passed = Math.random() > 0.35;
+  const passed = Math.random() > 0.4;
 
   if (passed) {
     const p = loadProgress();
@@ -148,12 +136,12 @@ function submitAnswer() {
     saveProgress(p);
     alert("Coach: Good. That cog turned.");
   } else {
-    alert("Coach: That cog slipped. Gym time.");
+    alert("Coach: That cog slipped. Fix it and go again.");
   }
 
   renderHome();
 }
 
-/* ---------- INIT ---------- */
+/* ---------- Init ---------- */
 
 document.addEventListener("DOMContentLoaded", renderHome);
