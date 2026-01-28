@@ -657,23 +657,12 @@ function pickRoundFocus(items) {
 }
 
 
-function buildSuggestionForItem(prompt, answer, lang, rubric, focusTag){
-  const aRaw = String(answer||"").trim();
-  const pRaw = String(prompt||"").trim();
+function buildSuggestionForItem(prompt, _ans, lang, rubric, focusTag){
+  // learner answer deliberately ignored
+  const teaching = buildCoachTeaching(focusTag, lang);
+  return teaching?.model || "";
+}
 
-  function modelFromPromptES(p, level){
-    const s = String(p||"").toLowerCase();
-    if(/telephone|tel[ée]fono|teléfono|movil|móvil|mobile|cell(phone)?|smartphone/.test(s)) return "Mi teléfono es moderno y lo uso para hablar con mis amigos y escuchar música.";
-    if(/town|pueblo|ciudad|barrio/.test(s)) return "Vivo en un pueblo pequeño y hay un parque donde quedo con mis amigos.";
-    if(/school|colegio|instituto|escuela/.test(s)) return "Mi colegio es grande y tiene un patio donde jugamos al fútbol.";
-    if(/classroom|clase/.test(s)) return "Mi clase es luminosa y hay pósters en las paredes.";
-    if(/friend|amig[oa]/.test(s)) return "Mi mejor amigo es simpático y le gusta el fútbol porque es muy activo.";
-    if(/family|familia/.test(s)) return "En mi familia somos cuatro y nos llevamos muy bien.";
-    if(/bedroom|habitaci/.test(s)) return "Mi habitación es pequeña pero cómoda y tengo un escritorio para estudiar.";
-    if(/person.*admire|admire|admiro/.test(s)) return "Admiro a mi madre porque es trabajadora y siempre me ayuda.";
-    if(/house|home|casa/.test(s)) return "Mi casa es bastante moderna y tiene una cocina grande.";
-    return "Es interesante y me gusta bastante.";
-  }
 
   function pickDetailAddonES(p){
     const s = String(p||"").toLowerCase();
