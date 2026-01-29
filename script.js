@@ -717,10 +717,7 @@ function buildSuggestionForItem(prompt, _ans, lang, rubric, focusTag){
     return pick(["es bastante moderno", "me gusta mucho", "es muy cómodo", "es interesante para mí"]);
   }
 
-  // If blank or unusable, generate a model from the prompt so the learner sees what “good” looks like.
-  if(!aRaw || isBadGymSeed(aRaw)) {
-    return (lang==="es") ? modelFromPromptES(pRaw, Number(state.level)||1) : "—";
-  }
+ 
 
   const a = aRaw;
 
