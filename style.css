@@ -219,3 +219,10 @@ ul.theme {
 .prizeBox {
   display: none !important;
 }
+/* =========================================
+   TILE HOME — hide game shell until started
+   ========================================= */
+
+.wrap {
+  display: none;
+}
