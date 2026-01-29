@@ -145,3 +145,16 @@ footer {
 #screenHome {
   display: none;
 }
+/* =========================================
+   Hide legacy game panels on tile-based HOME
+   ========================================= */
+
+/* Hide all old screen cards */
+#screenHome,
+#screenSetup,
+#screenRound,
+#screenResults,
+#screenGym,
+#screenCoach {
+  display: none !important;
+}
