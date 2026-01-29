@@ -3089,7 +3089,7 @@ if(el.rewardOk){
     updatePills();
     renderThemeTiles();
     wire();
-    show("home");
+    //show("home");
 
     // First-run: ask for a name (optional)
     if(!getPlayerName()){
