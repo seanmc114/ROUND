@@ -17,7 +17,7 @@
   ];
 
   // =========================
-  // HOME RENDER (FORCED TILES)
+  // HOME RENDER (Tiles)
   // =========================
   function renderHome(){
     const app = document.getElementById("app");
@@ -38,7 +38,7 @@
             background:#ffffff;
             box-shadow:0 12px 28px rgba(0,0,0,.15);
             transition:transform .15s ease, box-shadow .15s ease;
-          " onclick="alert('Theme selected: ${t.label}')">
+          " data-theme="${t.id}">
             
             <div style="
               height:140px;
@@ -59,6 +59,20 @@
         `).join("")}
       </div>
     `;
+
+    // temporary click wiring (safe)
+    app.querySelectorAll("[data-theme]").forEach(tile => {
+      tile.addEventListener("click", () => {
+        alert("Theme selected: " + tile.dataset.theme);
+      });
+    });
   }
 
- 
+  // =========================
+  // BOOT — START ON HOME
+  // =========================
+  document.addEventListener("DOMContentLoaded", () => {
+    renderHome();
+  });
+
+})();
