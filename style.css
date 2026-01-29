@@ -141,3 +141,7 @@ footer {
   border-top: 1px solid #e3e6f0;
   background: white;
 }
+/* Hide legacy HOME text when tiles are used */
+#screenHome {
+  display: none;
+}
