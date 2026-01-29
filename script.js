@@ -1,36 +1,50 @@
 (function(){
   "use strict";
 
-  // --- THEMES (minimal, safe) ---
+  // =========================
+  // THEMES (Home Screen Tiles)
+  // =========================
   const THEMES = [
     { id: "myself", label: "Myself", image: "img/myself.png" },
     { id: "family", label: "Family & Friends", image: "img/family.png" },
-    { id: "home", label: "Home", image: "img/home.png" }
+    { id: "home", label: "Home", image: "img/home.png" },
+    { id: "school", label: "School", image: "img/school.png" },
+    { id: "freetime", label: "Free Time", image: "img/freetime.png" },
+    { id: "food", label: "Food & Daily Life", image: "img/food.png" },
+    { id: "health", label: "Health & Wellbeing", image: "img/health.png" },
+    { id: "town", label: "My Town", image: "img/town.png" },
+    { id: "travel", label: "Holidays & Travel", image: "img/travel.png" }
   ];
 
-  // --- HOME RENDER (diagnostic version) ---
+  // =================================
+  // HOME RENDER (Tiles Screen)
+  // =================================
   function renderHome(){
     const app = document.getElementById("app");
+    if(!app) return;
 
-    if(!app){
-      alert("NO #app FOUND");
-      return;
-    }
-
-    // Force visible output
     app.innerHTML = `
-      <h2 style="color:red; margin:20px 0;">RENDER HOME RAN</h2>
       <div class="tile-grid">
         ${THEMES.map(t => `
-          <div class="tile" style="border:2px solid red; padding:12px; margin:10px;">
-            <strong>${t.label}</strong>
+          <div class="tile" data-theme="${t.id}">
+            <div class="tile-img" style="background-image:url('${t.image}')"></div>
+            <div class="tile-title">${t.label}</div>
           </div>
         `).join("")}
       </div>
     `;
+
+    // Temporary click handler (safe placeholder)
+    document.querySelectorAll(".tile").forEach(tile => {
+      tile.addEventListener("click", () => {
+        alert("Theme selected: " + tile.dataset.theme);
+      });
+    });
   }
 
-  // --- RUN ON LOAD ---
+  // =========================
+  // BOOT
+  // =========================
   document.addEventListener("DOMContentLoaded", renderHome);
 
 })();
