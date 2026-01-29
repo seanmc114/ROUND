@@ -34,8 +34,6 @@ const ERROR_WEIGHTS = {
 };
 // === END COACH DIAGNOSTIC MODEL ===
 
-// ---- Safe storage ----
-const storage = (function(){
  
 // ---- Safe storage (prevents crashes in private mode / blocked storage) ----
 const storage = (function(){
