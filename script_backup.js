@@ -1,4 +1,5 @@
 
+
 /* LOOPS — Theme Tiles + 10-level-per-theme (Jan 2026)
    Move 2:
    - Themes are the former topic list (10 themes)
@@ -10,7 +11,9 @@
 
 (function(){
   "use strict";
+let AT_HOME = true;
 
+   
   const PROMPTS_PER_ROUND = 5;
   const PENALTY_SEC = 30;
   
