@@ -196,3 +196,26 @@ ul.theme {
 .prizeModal {
   display: none !important;
 }
+/* =========================================
+   TILE HOME — hide legacy nav + lists
+   ========================================= */
+
+/* Hide legacy theme/level navigation column */
+.nav,
+.navCol,
+.navPane,
+.menu,
+.menuCol,
+.menuPane,
+#nav,
+#menu {
+  display: none !important;
+}
+
+/* Hide leftover prize stub on home */
+#prize,
+#prizeBox,
+.prize,
+.prizeBox {
+  display: none !important;
+}
