@@ -116,6 +116,7 @@ const COACH = {
     "Boss: variety — detail + structure + accuracy."
   ]
 };
+/* DEBUG CUT START */
 
 
 function getPlayerName(){
@@ -3118,5 +3119,6 @@ function forceRenderTiles(){
   `;
 }
 alert("JS IS RUNNING");
+/* DEBUG CUT END */
 
 })();
