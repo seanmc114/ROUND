@@ -1500,6 +1500,16 @@ const hasConnectorES = (s)=> /\b(y|pero|porque|además|entonces|también|sin\s+e
       rec.start();
     }catch{}
   }
+function someEarlierFunction(){
+  ...
+}
+
+return;
+
+// code below this will not run for now
+function laterFunction(){
+  ...
+}
 
   
   function isIdxLocked(i){
