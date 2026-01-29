@@ -3091,5 +3091,21 @@ if(el.rewardOk){
   }
 
   document.addEventListener("DOMContentLoaded", init);
+// === EMERGENCY TILE RENDER PATCH ===
+function forceRenderTiles(){
+  const app = document.getElementById("app");
+  if(!app || typeof THEMES === "undefined") return;
+
+  app.innerHTML = `
+    <div class="tile-grid">
+      ${THEMES.map(t => `
+        <div class="tile" onclick="startTheme('${t.id}')">
+          <div class="tile-img" style="background-image:url('${t.image || ''}')"></div>
+          <div class="tile-title">${t.title}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
 
 })();
