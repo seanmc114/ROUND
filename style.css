@@ -166,3 +166,33 @@ footer {
   display: none !important;
 }
 /* =========================================
+/* =========================================
+   TILE HOME — final cleanup
+   ========================================= */
+
+/* Hide legacy theme text list */
+#themeList,
+.themeList,
+.theme-list,
+ul[aria-label="Theme"],
+ul.theme {
+  display: none !important;
+}
+
+/* Hide level picker / sidebar blocks */
+#levels,
+#levelPicker,
+.levelPicker,
+.sidebar,
+.leftCol,
+.leftPane {
+  display: none !important;
+}
+
+/* Hide coach / prize overlays on home */
+#coachModal,
+#prizeModal,
+.coachModal,
+.prizeModal {
+  display: none !important;
+}
