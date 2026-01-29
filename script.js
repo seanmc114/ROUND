@@ -3107,5 +3107,6 @@ function forceRenderTiles(){
     </div>
   `;
 }
+alert("JS IS RUNNING");
 
 })();
