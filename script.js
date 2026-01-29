@@ -20,7 +20,7 @@ function renderHome(){
       ${THEMES.map(t => `
         <div class="tile" onclick="alert('Clicked: ${t.title}')">
           <div class="tile-img" style="background-image:url('${t.image}')"></div>
-          <div class="tile-title">${t.title}</div>
+          <div class="tile-title">${t.label}</div>
         </div>
       `).join("")}
     </div>
