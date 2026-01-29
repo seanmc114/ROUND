@@ -1,6 +1,6 @@
 (function(){
   "use strict";
-})();
+
 // Replace the LEVEL_INFO/THEMES generation with an explicit THEMES array:
 const THEMES = [
   { id: "myself", idx: 0, label: "Myself", hint: "Describe yourself", icon: "🧍", image: "img/myself.png" },
