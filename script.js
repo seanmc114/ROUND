@@ -12,3 +12,4 @@ const THEMES = [
 // Recreate THEME_BY_ID (code relies on it)
 const THEME_BY_ID = Object.fromEntries(THEMES.map(t => [t.id, t]));
 
+})();
