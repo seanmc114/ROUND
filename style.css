@@ -158,3 +158,10 @@ footer {
 #screenCoach {
   display: none !important;
 }
+/* =========================================
+   TILE HOME MODE — hide all legacy panels
+   ========================================= */
+
+.card {
+  display: none !important;
+}
