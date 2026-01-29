@@ -38,17 +38,25 @@ const ERROR_WEIGHTS = {
 // ---- Safe storage (prevents crashes in private mode / blocked storage) ----
 const storage = (function(){
   const mem = Object.create(null);
+
   function get(k){
-    try{ return localStorage.getItem(k); }catch(_){ return Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null; }
+    try{ return localStorage.getItem(k); }
+    catch(_){ return Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null; }
   }
+
   function set(k,v){
-    try{ localStorage.setItem(k, String(v)); }catch(_){ mem[k] = String(v); }
+    try{ localStorage.setItem(k, String(v)); }
+    catch(_){ mem[k] = String(v); }
   }
+
   function remove(k){
-    try{ localStorage.removeItem(k); }catch(_){ delete mem[k]; }
+    try{ localStorage.removeItem(k); }
+    catch(_){ delete mem[k]; }
   }
-  return {get,set,remove};
+
+  return { get, set, remove };
 })();
+
 
 
 // --- Player + Coach ---
