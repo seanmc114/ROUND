@@ -3088,7 +3088,7 @@ if(el.rewardOk){
     state.mode = el.modeSelect ? el.modeSelect.value : "classic";
     updatePills();
     renderThemeTiles();
-    wire();
+    //wire();
     //show("home");
 
     // First-run: ask for a name (optional)
